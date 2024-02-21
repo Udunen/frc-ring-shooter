@@ -7,16 +7,15 @@ public class Main {
     RootFinder rootFinder = new RootFinder();
     public static void main(String[] args) {
 
-        
-        double arm_length = 24.727914/3.281;
-        double shooter_length = 5.639686/3.281;
+        double arm_length = 24.727914/39.37;
+        double shooter_length = 5.639686/39.37;
         
         double a_y = -9.8; // gravity
         double v_y = 0;
-        double p_y = -3.0/3.281; // vertical distance from target
+        double p_y = -3.0; // vertical distance from target
         double a_x = 0; // pretend this doesn't exist because I don't feel like doing air resistance
         double v_x = 0;
-        double p_x = -5.0/3.281; // horizontal distance from target
+        double p_x = -5.0; // horizontal distance from target
         
         double shootingvelo_y = Math.sqrt(p_y * a_y * 2);
         double shootingvelo_x = p_x/(shootingvelo_y/a_y);
