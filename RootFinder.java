@@ -5,35 +5,48 @@ import java.util.List;
 public class RootFinder {
 
     public static List<Double> rootFinder(List<Double> equation, double error) {
+        // System.out.println("Equation: " + equation);
         List<List<Double>> derivatives = new ArrayList<>();
         derivatives.add(equation);
         for (int i = 0; i < equation.size() - 3; i++) {
             derivatives.add(takeDerivative(derivatives.get(i)));
         }
-
+        // System.out.println("Derivatives: " + derivatives);
         List<Double> roots = quadraticFormula(derivatives.get(derivatives.size() - 1));
+        // System.out.println("Roots: " + roots);
         if (roots.size() != 2) {
             System.out.println("Could not find roots :(");
             return null;
         }
-        derivatives.remove(derivatives.size() - 1);
+        derivatives.remove(derivatives.size()-1);
         for (int i = derivatives.size() - 1; i >= 0; i--) {
             List<Double> newRoots = new ArrayList<>();
             newRoots.add(newtonsMethod(derivatives.get(i), roots.get(0) - 20, error));
+            System.out.println(roots.size());
             for (int j = 0; j < roots.size() - 1; j++) {
                 double root;
+                System.out.println(functionOutput(derivatives.get(i), roots.get(j)) > functionOutput(derivatives.get(i), roots.get(j + 1)));
+                // System.out.println(functionOutput(derivatives.get(i), roots.get(j)));
+                System.out.println(derivatives.get(i));
+                System.out.println(roots.get(j));
+                System.out.println(roots.get(j+1));
+                // System.out.println(functionOutput(derivatives.get(i), roots.get(j + 1)));
                 if (functionOutput(derivatives.get(i), roots.get(j)) > functionOutput(derivatives.get(i), roots.get(j + 1))) {
                     root = binarySearchDescending(derivatives.get(i), roots.get(j), roots.get(j + 1), error);
+                    // System.out.println(root);
                 } else {
                     root = binarySearchAscending(derivatives.get(i), roots.get(j), roots.get(j + 1), error);
+                    // System.out.println(root);
                 }
                 if (!Double.isNaN(root)) {
                     newRoots.add(root);
                 }
             }
-            newRoots.add(newtonsMethod(derivatives.get(i), roots.get(roots.size() - 1) + 20, error));
+            newRoots.add(newtonsMethod(derivatives.get(i), roots.get(roots.size()-1) + 20, error));
             roots = newRoots;
+            // System.out.println(newRoots);
         }
+        // System.out.println("Roots: " + roots);
         return roots;
     }
 
@@ -62,6 +75,10 @@ public class RootFinder {
     }
 
     public static double binarySearchDescending(List<Double> equation, double left, double right, double error) {
+        System.out.println(equation);
+        System.out.println(left);
+        System.out.println(right);
+        System.out.println(error);
         while (left <= right) {
             double mid = (left + right) / 2;
             double output = functionOutput(equation, mid);
@@ -93,11 +110,11 @@ public class RootFinder {
 
     public static double functionOutput(List<Double> equation, double input) {
         int length = equation.size();
-        double sum = 0;
-        for (int i = 0; i < length; i++) {
-            sum += equation.get(length - i - 1) * Math.pow(input, i);
+        double result = 0.0;
+        for (int i = length - 1; i >= 0; i--) {
+            result += equation.get(length - i - 1) * Math.pow(input, i);
         }
-        return sum;
+        return result;
     }
 
     public static boolean withinRange(double num, double target, double range) {
