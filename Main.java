@@ -6,22 +6,30 @@ import java.util.List;
 public class Main {
     RootFinder rootFinder = new RootFinder();
     public static void main(String[] args) {
+        
+        // everything is in meters, radians, and seconds
 
+        // anything divided by 39.37 is inches converted to meters
+        // anything divided by 3.281 is feet converted to meters
+        
         double arm_length = 24.727914/39.37;
         double shooter_length = 5.639686/39.37;
         
         double a_y = -9.8; // gravity
         double v_y = 0;
-        double p_y = -2.0/3.281; // vertical distance from target
+        double p_y = -10; // vertical distance from target
         double a_x = 0; // pretend this doesn't exist because I don't feel like doing air resistance
         double v_x = 0;
-        double p_x = -5.0/3.281; // horizontal distance from target
+        double p_x = -12; // horizontal distance from target
         
-        // double shootingvelo_y = Math.sqrt(p_y * a_y * 2);
-        // double shootingvelo_x = p_x/(shootingvelo_y/a_y);
-        // double shootingvelo = Math.sqrt(Math.pow(shootingvelo_x, 2) + Math.pow(shootingvelo_y, 2));
-        // double rpm = (30*shootingvelo)/(Math.PI*(2.0/39.37));
-        double shootingvelo = (2.0*Math.PI/60.0)*(2.0/39.37)*1280.0; // right
+        double shootingvelo_y = Math.sqrt(p_y * a_y * 2);
+        double shootingvelo_x = p_x/(shootingvelo_y/a_y);
+        double shootingvelo = Math.sqrt(Math.pow(shootingvelo_x, 2) + Math.pow(shootingvelo_y, 2));
+        if(shootingvelo > 5700) {
+            shootingvelo = 5700;
+        }
+        double rpm = (30*shootingvelo)/(Math.PI*(2.0/39.37));
+        // double shootingvelo = (2.0*Math.PI/60.0)*(2.0/39.37)*1280.0; // right
         
         double t4 = (Math.pow(a_x, 2) + Math.pow(a_y, 2))/4;
         double t3 = (a_x*v_x + a_y*v_y);
@@ -85,7 +93,7 @@ public class Main {
             desmos.write("a_{degrees}=" + (arm_theta*(180.0/Math.PI)) + "\n");
             desmos.write("\\operatorname{polygon}((0,0),(" + -shooter_length * Math.cos(shooting_theta) + "," + -shooter_length * Math.sin(shooting_theta) + "))\n");
             desmos.write("\\operatorname{polygon}((" + -shooter_length * Math.cos(shooting_theta) + "," + -shooter_length * Math.sin(shooting_theta) + "),(" + arm_length * Math.cos(arm_theta) + "," + -arm_length * Math.sin(arm_theta) + "))\n");
-            // desmos.write("r_{pm}=" + rpm);
+            desmos.write("r_{pm}=" + rpm);
             desmos.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
