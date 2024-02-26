@@ -9,6 +9,12 @@ import java.net.URISyntaxException;
 public class Main {
     RootFinder rootFinder = new RootFinder();
     public static void main(String[] args) {
+
+        // this code is very effective until around 30 feet which is further than podium so it doesnt matter lol
+        //      the reason its uneffective at until 30 is bc the note needs to follow the trajectory and enter the speaker
+        //      before the trajectory reaches its apex and around 30 feet is when it reaches the apex
+        //      i mean if we increase velocity more around then it should work, not sure why it doesnt rn
+        //      but it doesnt matter
         
         // everything is in meters, radians, and seconds
 
@@ -20,10 +26,10 @@ public class Main {
         
         double a_y = -9.8; // gravity
         double v_y = 0;
-        double p_y = -6.703/3.281; // vertical distance from target, this will change bc the arm will raise the further it gets away
+        double p_y = -6.703/3.281; // vertical distance from target, this will change bc the arm will raise the further it gets away 6.703
         double a_x = 0; // pretend this doesn't exist because I don't feel like doing air resistance
         double v_x = 0;
-        double p_x = -5.60307862645667/3.281; // horizontal distance from target, this will change bc the robot moves
+        double p_x = -5.60307862645667/3.281; // horizontal distance from target, this will change bc the robot moves 5.60307862645667
         
         // i swear this is the only magic number and its to align the arm to 0 when against the subwoofer
         // you could go through the math to get the good number but i dont feel like it so nah
