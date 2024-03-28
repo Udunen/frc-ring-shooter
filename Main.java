@@ -30,24 +30,24 @@ public class Main {
         double arm_length = 24.727914/39.37;
         double shooter_length = 5.639686/39.37;
         
-        //-6.703, -5.60307862645667 is up against subwoofer
+        //y = -5.401353307, x = -5.60307862645667 is up against subwoofer
         double a_y = -9.8; // gravity
         double v_y = 0;
-        double p_y = -6.703/3.281; // vertical distance from target, this will change bc the arm will raise the further it gets away
+        double p_y = -5.401353307/3.281; // vertical distance from target, this will change bc the arm will raise the further it gets away
         double a_x = -0; // pretend this doesn't exist because I don't feel like doing air resistance
         double v_x = 0;
         double p_x = -5.60307862645667/3.281; // horizontal distance from target, this will change bc the robot moves
         
         // i swear this is the only magic number and its to align the arm to 0 when against the subwoofer
         // you could go through the math to get the good number but i dont feel like it so nah
-        double magic = 2.9998; // 2.9998
+        double magic = 0.8812; // 0.8812
         double shootingvelo_y = Math.sqrt(p_y * a_y * 2) + magic;
         double shootingvelo_x = p_x/(shootingvelo_y/a_y) + magic;
-        double shootingvelo = Math.sqrt(Math.pow(shootingvelo_x, 2) + Math.pow(shootingvelo_y, 2));
+        double shootingvelo = Math.sqrt(Math.pow(shootingvelo_x, 2) + Math.pow(shootingvelo_y, 2))*2;
         if(shootingvelo > 5700) {
             shootingvelo = 5700;
         }
-        double rpm = (30*shootingvelo)/(Math.PI*(2.0/39.37));
+        double rpm = (30*shootingvelo)/(Math.PI*(2.0/39.37))/2;
         
         double t4 = (Math.pow(a_x, 2) + Math.pow(a_y, 2))/4;
         double t3 = (a_x*v_x + a_y*v_y);
@@ -115,8 +115,8 @@ public class Main {
             desmos.write("r_{pm}=" + rpm);
             desmos.close();
 
-            Desktop.getDesktop().browse(new URI("https://www.desmos.com/calculator"));
-        } catch (IOException | URISyntaxException e) {
+            // Desktop.getDesktop().browse(new URI("https://www.desmos.com/calculator"));
+        } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
