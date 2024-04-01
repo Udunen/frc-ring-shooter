@@ -2,9 +2,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.awt.Desktop;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class Main {
     RootFinder rootFinder = new RootFinder();
@@ -33,16 +30,13 @@ public class Main {
         //y = -5.401353307, x = -5.60307862645667 is up against subwoofer
         double a_y = -9.8; // gravity
         double v_y = 0;
-        double p_y = -5.401353307/3.281; // vertical distance from target, this will change bc the arm will raise the further it gets away
+        double p_y = -7/3.281; // vertical distance from target, this will change bc the arm will raise the further it gets away
         double a_x = -0; // pretend this doesn't exist because I don't feel like doing air resistance
         double v_x = 0;
-        double p_x = -5.60307862645667/3.281; // horizontal distance from target, this will change bc the robot moves
+        double p_x = -11/3.281; // horizontal distance from target, this will change bc the robot moves
         
-        // i swear this is the only magic number and its to align the arm to 0 when against the subwoofer
-        // you could go through the math to get the good number but i dont feel like it so nah
-        double magic = 0.8812; // 0.8812
-        double shootingvelo_y = Math.sqrt(p_y * a_y * 2) + magic;
-        double shootingvelo_x = p_x/(shootingvelo_y/a_y) + magic;
+        double shootingvelo_y = Math.sqrt(p_y * a_y * 2);
+        double shootingvelo_x = p_x/(shootingvelo_y/a_y);
         double shootingvelo = Math.sqrt(Math.pow(shootingvelo_x, 2) + Math.pow(shootingvelo_y, 2))*2;
         if(shootingvelo > 5700) {
             shootingvelo = 5700;
@@ -103,12 +97,16 @@ public class Main {
         double shooting_theta = Math.atan(p_aimY / p_aimX);
         double arm_theta = shooting_theta - (55*Math.PI/180.0);
         // System.out.println(t);
-
+        
+        double speakerHalfX = (0.489813*Math.cos(14*Math.PI/180))/2;
+        double speakerHalfY = (0.489813*Math.sin(14*Math.PI/180))/2;
         try {
             FileWriter desmos = new FileWriter("desmos_stuffs.txt");
             desmos.write("(" + p_aimX + ", " + p_aimY + ")\n");
             desmos.write("(" + -p_x + ", " + -p_y + ")\n");
-            desmos.write("f\\left(x\\right)=" + p_aimY / p_aimX + "x-" + "\\frac{" + (-a_y) + "x^{2}}{2\\cdot\\left(" + shootingvelo + "\\right)^{2}\\cdot\\cos^{2}\\left(" + shooting_theta + "\\right)}\n");
+            desmos.write("f\\left(x\\right)=" + p_aimY / p_aimX + "x-" + "\\frac{" + (-a_y) + "x^{2}}{2\\cdot\\left(" + shootingvelo + "\\right)^{2}\\cdot\\cos^{2}\\left(" + shooting_theta + "\\right)}\\left\\{" + -p_x + ">x>0\\right\\}\n");
+            desmos.write("\\operatorname{polygon}((" + (-p_x-speakerHalfX) + "," + (-p_y+speakerHalfY) + "),(" + ((-p_x+speakerHalfX) + "," + (-p_y-speakerHalfY)) + "))\n");
+            desmos.write(p_aimY + " + \\left(\\frac{" + p_aimY + "}{" + p_aimX + "}\\right)\\left(x-" + p_aimX + "\\right)\\left\\{" + p_aimX + ">x>0\\right\\}\n");
             desmos.write("a_{degrees}=" + (-arm_theta*(180.0/Math.PI)) + "\n");
             desmos.write("\\operatorname{polygon}((0,0),(" + -shooter_length * Math.cos(shooting_theta) + "," + -shooter_length * Math.sin(shooting_theta) + "))\n");
             desmos.write("\\operatorname{polygon}((" + -shooter_length * Math.cos(shooting_theta) + "," + -shooter_length * Math.sin(shooting_theta) + "),(" + (-shooter_length * Math.cos(shooting_theta) + arm_length * Math.cos(arm_theta)) + "," + (-shooter_length * Math.sin(shooting_theta) + arm_length * Math.sin(arm_theta)) + "))\n");
